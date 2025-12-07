@@ -1,0 +1,78 @@
+name: Deploy Laravel to Azure Web App
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: mbstring, bcmath, intl, sqlite3, zip, exif, pcntl
+          tools: composer
+
+      # Composer producción
+      - name: Composer install (production)
+        run: composer install --optimize-autoloader --no-dev --no-interaction --prefer-dist
+
+      # PASO MÁGICO: todo lo que necesitas para que nunca falle
+      - name: Laravel + .env + Azure fixes (100% funcional)
+        run: |
+          # 1. Copiar tu .env.example exacto → .env
+          cp .env.example .env
+
+          # 2. Cambiar valores críticos para producción en Azure
+          sed -i 's/APP_ENV=.*/APP_ENV=production/' .env
+          sed -i 's/APP_DEBUG=.*/APP_DEBUG=false/' .env
+          sed -i 's|APP_URL=.*|APP_URL=https://proyect1-ftf5fyh2efhka3ec.canadacentral-01.azurewebsites.net|' .env
+
+          # 3. Generar APP_KEY (ahora sí existe .env)
+          php artisan key:generate --force
+
+          # 4. Storage link + cachear todo
+          php artisan storage:link || echo "Storage link already exists"
+          php artisan config:cache
+          php artisan route:cache
+          php artisan view:cache
+
+          # 5. Fix definitivo de carpetas y permisos para Azure
+          mkdir -p storage/framework/cache/data
+          mkdir -p storage/framework/sessions
+          mkdir -p storage/framework/views
+          mkdir -p storage/logs
+          chmod -R 777 storage bootstrap/cache || true
+
+      # Subir todo
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: php-app
+          path: .
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    
+    steps:
+      - name: Download artifact from build job
+        uses: actions/download-artifact@v4
+        with:
+          name: php-app
+      
+      - name: 'Deploy to Azure Web App'
+        uses: azure/webapps-deploy@v3
+        id: deploy-to-webapp
+        with:
+          app-name: 'proyect1'
+          slot-name: 'Production'
+          package: .
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_394BA62917D94783902A95C258AC480B }}
