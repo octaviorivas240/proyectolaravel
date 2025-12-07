@@ -1,0 +1,54 @@
+name: Static Code Review
+
+on:
+  push:
+    branches: [ "main", "develop" ]
+  pull_request:
+    branches: [ "main", "develop" ]
+
+jobs:
+  static-analysis:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4.14'
+          extensions: mbstring, intl, pdo_mysql
+          coverage: none
+          tools: composer
+
+      - name: Cache Composer dependencies
+        uses: actions/cache@v4
+        with:
+          path: vendor
+          key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-php-
+
+      - name: Install Composer dependencies
+        run: composer install --no-progress --prefer-dist --no-interaction
+
+      - name: Set up the database
+        run: |
+          cp .env.example .env
+          php artisan key:generate
+          php artisan migrate --env=testing
+
+      # ---------- ANALYSIS: PHPStan ----------
+      - name: Run PHPStan (Larastan)
+        run: |
+          php vendor/phpstan/phpstan/phpstan analyse --configuration=phpstan.neon
+
+      # ---------- ANALYSIS: Laravel Pint ----------
+      - name: Run Laravel Pint
+        run: |
+          php vendor/bin/pint --test
+
+      # ---------- Run Tests ----------
+      - name: Run tests
+        run: php artisan test
