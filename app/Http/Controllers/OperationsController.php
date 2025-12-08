@@ -39,7 +39,7 @@ class OperationsController extends Controller
         }
 
         return [
-            'imc'       => $imc,
+            'imc' => $imc,
             'categoria' => $categoria,
         ];
     }

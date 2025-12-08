@@ -2,14 +2,14 @@
 
 namespace Tests\Unit;
 
-use Tests\TestCase;
 use App\Http\Controllers\OperationsController;
+use Tests\TestCase;
 
 class OperationsControllerTest extends TestCase
 {
     public function test_suma_basica()
     {
-        $controller = new OperationsController();
+        $controller = new OperationsController;
 
         $resultado = $controller->addition(10, 5);
 
@@ -18,7 +18,7 @@ class OperationsControllerTest extends TestCase
 
     public function test_calcula_imc_correctamente()
     {
-        $controller = new OperationsController();
+        $controller = new OperationsController;
 
         $resultado = $controller->calcularIMC(70, 1.75);
 
@@ -28,7 +28,7 @@ class OperationsControllerTest extends TestCase
 
     public function test_lanza_excepcion_con_valores_invalidos()
     {
-        $controller = new OperationsController();
+        $controller = new OperationsController;
 
         $this->expectException(\InvalidArgumentException::class);
 
