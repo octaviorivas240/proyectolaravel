@@ -6,6 +6,15 @@ use Illuminate\Http\Request;
 
 class OperationsController extends Controller
 {
+    /**
+     * Calcula el monto total de una venta con impuestos y descuentos.
+     *
+     * @param float $precioUnitario
+     * @param int $cantidad
+     * @param float $impuestoPorcentaje
+     * @param float $descuentoPorcentaje
+     * @return array<string, float>
+     */
     public function calcularVenta(
         float $precioUnitario,
         int $cantidad,
