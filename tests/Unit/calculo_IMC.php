@@ -14,7 +14,7 @@ class ExampleTest extends TestCase
     {
         $controller = new OperationsController;
 
-        $resultado = $controller->calcularIMC(62, 1.65);
+        $resultado = $controller->calcularIMC(62, 1.60);
 
         $this->assertEquals(22.86, $resultado['imc']);
         $this->assertEquals('Normal', $resultado['categoria']);
