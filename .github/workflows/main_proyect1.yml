@@ -36,7 +36,7 @@ jobs:
           # 2. Cambiar valores críticos para producción en Azure
           sed -i 's/APP_ENV=.*/APP_ENV=production/' .env
           sed -i 's/APP_DEBUG=.*/APP_DEBUG=false/' .env
-          sed -i 's|APP_URL=.*|APP_URL=https://proyect1-ftf5fyh2efhka3ec.westus-01.azurewebsites.net/|' .env
+          sed -i 's|APP_URL=.*|APP_URL=https://proyect1-ftf5fyh2efhka3ec.canada-01.azurewebsites.net/|' .env
 
           # 3. Generar APP_KEY (ahora sí existe .env)
           php artisan key:generate --force
