@@ -12,27 +12,26 @@ class OperationsController extends Controller
     public function calcularIMC(float $peso, float $altura): array
     {
         if ($peso <= 0 || $altura <= 0) {
-            throw new \InvalidArgumentException("La altura y el peso deben ser 
-            mayor que cero.");
+            throw new \InvalidArgumentException('La altura y el peso deben ser 
+            mayor que cero.');
         }
 
         $imc = $peso / ($altura * $altura);
         $imc = round($imc, 2);
 
-        if($imc < 18.5) {
-            $categoria = "Bajo peso";
+        if ($imc < 18.5) {
+            $categoria = 'Bajo peso';
         } elseif ($imc < 25) {
-            $categoria = "Normal";
+            $categoria = 'Normal';
         } elseif ($imc < 30) {
-            $categoria = "Sobrepeso";
+            $categoria = 'Sobrepeso';
         } else {
-            $categoria = "Obesidad";
+            $categoria = 'Obesidad';
         }
 
         return [
             'imc' => $imc,
-            'categoria' => $categoria
+            'categoria' => $categoria,
         ];
     }
-
 }

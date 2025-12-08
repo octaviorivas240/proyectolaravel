@@ -10,9 +10,9 @@ class ExampleTest extends TestCase
     /**
      * Función de Mónica, calcular el IMC.
      */
-    public function test_calcularIMC(): void
+    public function test_calcular_imc(): void
     {
-        $controller = new OperationsController();
+        $controller = new OperationsController;
 
         $resultado = $controller->calcularIMC(62, 1.65);
 
