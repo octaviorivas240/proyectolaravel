@@ -1,0 +1,40 @@
+<?php
+
+namespace App\Services;
+
+class NameNormalizer
+{
+    // Lista de preposiciones que deben ir en minúscula
+    private array $lowercaseWords = [
+        'de', 'del', 'la', 'las', 'los'
+    ];
+
+    public function normalize(string $name): string
+    {
+        // Elimina espacios de más
+        $name = trim(preg_replace('/\s+/', ' ', $name));
+
+        if ($name === '') {
+            return '';
+        }
+
+        // Divide en palabras
+        $words = explode(' ', $name);
+
+        // Aplica formato a cada palabra
+        $formattedWords = array_map(function ($word) {
+            $lower = mb_strtolower($word);
+
+            // Si es una preposición, va en minúscula directamente
+            if (in_array($lower, $this->lowercaseWords)) {
+                return $lower;
+            }
+
+            // Capitalizar primera letra (compatible con acentos)
+            return mb_convert_case($lower, MB_CASE_TITLE, "UTF-8");
+        }, $words);
+
+        // Une nuevamente
+        return implode(' ', $formattedWords);
+    }
+}
