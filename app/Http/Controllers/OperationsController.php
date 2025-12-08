@@ -22,7 +22,7 @@ class OperationsController extends Controller
         float $descuentoPorcentaje = 0
     ): array {
         if ($precioUnitario < 0 || $cantidad < 1) {
-            throw new \InvalidArgumentException("Datos de entrada inválidos");
+            throw new \InvalidArgumentException('Datos de entrada inválidos');
         }
 
         $subtotal = $precioUnitario * $cantidad;
