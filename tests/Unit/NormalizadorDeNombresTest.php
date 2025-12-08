@@ -1,27 +1,35 @@
 <?php
 
-namespace Tests\Unit;
+namespace Tests\Feature;
 
-use App\Services\NormalizadorDeNombres;
 use Tests\TestCase;
 
-class NormalizadorDeNombresTest extends TestCase
+class NormalizarNombreTest extends TestCase
 {
-    public function tests_normaliza_nombre_basico()
+    public function test_normaliza_nombre_correctamente()
     {
-        $resultado = NormalizadorDeNombres::normalizar('   jUaN   péRez  ');
-        $this->assertEquals('Juan', $resultado);
+        $response = $this->post('/normalizar-nombre', [
+            'nombre' => '   jUaN   péRez   ',
+        ]);
+
+        $response->assertStatus(200);
+
+        $response->assertJson([
+            'original' => '   jUaN   péRez   ',
+            'normalizado' => 'Juan Perez',
+        ]);
     }
 
-    public function test_normaliza_nombre_con_espacios_multiples()
+    public function test_valida_que_el_nombre_sea_obligatorio()
     {
-        $resultado = NormalizadorDeNombres::normalizar(' Ana   maria   lopez ');
-        $this->assertEquals('Ana Maria Lopez', $resultado);
-    }
+        $response = $this->post('/normalizar-nombre', [
+            'nombre' => '',
+        ]);
 
-    public function test_devuelve_string_vacio_para_nombre_vacio()
-    {
-        $resultado = NormalizadorDeNombres::normalizar('   ');
-        $this->assertEquals('', $resultado);
+        $response->assertStatus(302); // Laravel redirige en validación fallida
+
+        $response->assertSessionHasErrors([
+            'nombre',
+        ]);
     }
 }
