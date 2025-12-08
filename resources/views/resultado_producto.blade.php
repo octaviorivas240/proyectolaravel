@@ -6,7 +6,7 @@
 <body>
     <h1>Resultado del cálculo</h1>
 
-    <p><strong>hp</strong> ${{ $precioInicial }}</p>
+    <p><strong>Precio inicial:</strong> ${{ $precioInicial }}</p>
     <p><strong>Operación:</strong> {{ $detalle }}</p>
     <p><strong>Valor final:</strong> ${{ $valorFinal }}</p>
 
