@@ -16,7 +16,7 @@ class ExampleTest extends TestCase
 
         $resultado = $controller->calcularIMC(62, 1.65);
 
-        $this->assertEquals(22.86, $resultado['El IMC es: ']);
-        $this->assertEquals('Normal', $resultado['Corresponde a la categoria:']);
+        $this->assertEquals(22.86, $resultado['imc']);
+        $this->assertEquals('Normal', $resultado['categoria']);
     }
 }

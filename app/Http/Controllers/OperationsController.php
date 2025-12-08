@@ -4,7 +4,12 @@ namespace App\Http\Controllers;
 
 class OperationsController extends Controller
 {
-    public function calcularIMC(float $peso, float $altura): float
+    public function addition(int $a, int $b): int
+    {
+        return $a + $b;
+    }
+
+    public function calcularIMC(float $peso, float $altura): array
     {
         if ($peso <= 0 || $altura <= 0) {
             throw new \InvalidArgumentException("La altura y el peso deben ser 
@@ -25,8 +30,9 @@ class OperationsController extends Controller
         }
 
         return [
-            'El IMC es: ' => $imc,
-            'Corresponde a la categoria:' => $categoria
+            'imc' => $imc,
+            'categoria' => $categoria
         ];
     }
+
 }
