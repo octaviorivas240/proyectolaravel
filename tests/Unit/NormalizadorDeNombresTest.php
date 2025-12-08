@@ -2,26 +2,36 @@
 
 namespace Tests\Unit;
 
-use App\Services\NormalizadorDeNombres;
 use Tests\TestCase;
+use App\Http\Controllers\OperationsController;
 
-class NormalizadorDeNombresTest extends TestCase
+class OperationsControllerTest extends TestCase
 {
-    public function test_normaliza_nombre_basico()
+    public function test_suma_basica()
     {
-        $resultado = NormalizadorDeNombres::normalizar('   jUaN   péRez  ');
-        $this->assertEquals('Juan', $resultado);
+        $controller = new OperationsController();
+
+        $resultado = $controller->addition(10, 5);
+
+        $this->assertEquals(15, $resultado);
     }
 
-    public function test_normaliza_nombre_con_espacios_multiples()
+    public function test_calcula_imc_correctamente()
     {
-        $resultado = NormalizadorDeNombres::normalizar(' Ana   maria   lopez ');
-        $this->assertEquals('Ana Maria Lopez', $resultado);
+        $controller = new OperationsController();
+
+        $resultado = $controller->calcularIMC(70, 1.75);
+
+        $this->assertEquals(22.86, $resultado['imc']);
+        $this->assertEquals('Normal', $resultado['categoria']);
     }
 
-    public function test_devuelve_string_vacio_para_nombre_vacio()
+    public function test_lanza_excepcion_con_valores_invalidos()
     {
-        $resultado = NormalizadorDeNombres::normalizar('   ');
-        $this->assertEquals('', $resultado);
+        $controller = new OperationsController();
+
+        $this->expectException(\InvalidArgumentException::class);
+
+        $controller->calcularIMC(0, 1.70); // peso inválido
     }
 }
