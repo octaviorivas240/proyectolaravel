@@ -7,6 +7,12 @@ use Illuminate\Http\Request;
 class OperationsController extends Controller
 {
     /**
+     * Calcula el monto total de una venta con impuestos y descuentos.
+     *
+     * @param float $precioUnitario
+     * @param int $cantidad
+     * @param float $impuestoPorcentaje (porcentaje, ej. 16)
+     * @param float $descuentoPorcentaje (porcentaje, ej. 10)
      * @return array<string, float>
      */
     public function calcularVenta(
@@ -16,7 +22,7 @@ class OperationsController extends Controller
         float $descuentoPorcentaje = 0
     ): array {
         if ($precioUnitario < 0 || $cantidad < 1) {
-            throw new \InvalidArgumentException('Datos de entrada inválidos');
+            throw new \InvalidArgumentException("Datos de entrada inválidos");
         }
 
         $subtotal = $precioUnitario * $cantidad;
