@@ -12,12 +12,9 @@ class ExampleTest extends TestCase
         $this->assertTrue(true);
     }
 
-    /**
-     * Pruebas COMPLEJAS del método calcularVenta()
-     */
     public function test_calcular_venta(): void
     {
-        $controller = new OperationsController();
+        $controller = new OperationsController;
 
         $resultado = $controller->calcularVenta(
             precioUnitario: 100.0,
@@ -26,7 +23,6 @@ class ExampleTest extends TestCase
             descuentoPorcentaje: 10
         );
 
-        // 1. Que retorne un array con claves esperadas
         $this->assertIsArray($resultado);
         $this->assertArrayHasKey('subtotal', $resultado);
         $this->assertArrayHasKey('descuento', $resultado);
@@ -34,25 +30,20 @@ class ExampleTest extends TestCase
         $this->assertArrayHasKey('impuesto', $resultado);
         $this->assertArrayHasKey('total', $resultado);
 
-        // 2. Validar cálculos exactos
         $this->assertSame(200.0, $resultado['subtotal']);
         $this->assertSame(20.0, $resultado['descuento']);
         $this->assertSame(180.0, $resultado['subtotal_final']);
         $this->assertSame(28.8, $resultado['impuesto']);
         $this->assertSame(208.8, $resultado['total']);
 
-        // 3. Validar que todos los valores sean numéricos
         foreach ($resultado as $valor) {
             $this->assertIsFloat($valor);
         }
     }
 
-    /**
-     * Prueba casos extremos y límites.
-     */
     public function test_calcular_venta_sin_impuestos_ni_descuento(): void
     {
-        $controller = new OperationsController();
+        $controller = new OperationsController;
 
         $resultado = $controller->calcularVenta(50.0, 3);
 
@@ -63,12 +54,9 @@ class ExampleTest extends TestCase
         $this->assertSame(150.0, $resultado['total']);
     }
 
-    /**
-     * Prueba manejo de errores.
-     */
     public function test_calcular_venta_datos_invalidos(): void
     {
-        $controller = new OperationsController();
+        $controller = new OperationsController;
 
         $this->expectException(\InvalidArgumentException::class);
 
