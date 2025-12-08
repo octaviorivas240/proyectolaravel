@@ -13,6 +13,7 @@ class OperationsController extends Controller
     public function normalizarNombre(Request $request): string
     {
         $nombre = $request->input('nombre', '');
+
         return NormalizadorDeNombres::normalizar($nombre);
     }
 }
